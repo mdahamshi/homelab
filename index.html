@@ -190,11 +190,19 @@
     <header>
       <h1>Homelab</h1>
       <p class="lede">
-        A documented, sanitized self-hosted setup: <strong>Proxmox VE</strong> +
-        <strong>ZFS</strong>, <strong>Docker</strong> deployed via
-        <strong>Coolify</strong>, per-host <strong>Traefik</strong> reverse
-        proxies, <strong>Cloudflare Tunnels</strong>, a <strong>k3s Kubernetes
-          cluster</strong>, and <strong>Home Assistant OS</strong>.
+        A self-hosted infrastructure I built and run end-to-end:
+        <strong>Proxmox VE</strong> virtualizing everything from CI/CD to
+        home automation, backed by <strong>ZFS</strong> snapshots
+        replicated to a dedicated backup server, <strong>Docker</strong>
+        workloads deployed through <strong>Coolify</strong>,
+        <strong>Traefik</strong> handling reverse proxying per host,
+        <strong>Cloudflare Tunnels</strong> keeping zero ports open to the
+        internet, and a separate <strong>k3s</strong> cluster for
+        Kubernetes practice and pipeline experiments.
+      </p>
+      <p class="muted" style="margin:0 0 8px">
+        Every config here is sanitized and pulled straight from the
+        running system — nothing hand-written for show.
       </p>
       <p class="muted" style="margin:0">
         All hostnames, IPs and secrets are replaced with placeholders for public

@@ -1,9 +1,14 @@
 # Homelab
 
-A documented, sanitized look at a self-hosted homelab: Proxmox VE, ZFS,
-Docker via Coolify, Traefik reverse proxies, Cloudflare Tunnels, a k3s
-Kubernetes cluster, a Proxmox Backup Server, and Home Assistant OS — with
-every config redacted so it can live in a public repo.
+A self-hosted infrastructure I built and run end-to-end: Proxmox VE
+virtualizing everything from CI/CD to home automation, backed by ZFS
+snapshots replicated to a dedicated backup server, Docker workloads
+deployed through Coolify, Traefik handling reverse proxying per host,
+Cloudflare Tunnels keeping zero ports open to the internet, and a
+separate k3s cluster for Kubernetes practice and pipeline experiments.
+
+Every config here is sanitized and pulled straight from the running
+system — nothing hand-written for show.
 
 > All real hostnames are replaced with `*.example.home` / `*.example.com`,
 > IPs with `10.0.x.x` placeholders, and every secret is a placeholder in a
