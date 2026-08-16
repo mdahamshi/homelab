@@ -1,0 +1,31 @@
+# learn-jenkins-app — Deployment (namespace: default)
+# Also mirrored in staging (same image, NodePort service, staging ingress).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: learn-jenkins-app
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: learn-jenkins-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        app: learn-jenkins-app
+    spec:
+      containers:
+      - name: app
+        image: ghcr.io/example-user/learn-jenkins-app:79
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+      restartPolicy: Always

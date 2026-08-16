@@ -1,0 +1,72 @@
+# top-members — Ingress (prod namespace)
+# Hosts sanitized to placeholders (internal + public zones).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: top-members
+  namespace: top-members
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: top-members.k3.example.home
+    http:
+      paths:
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: server
+            port:
+              number: 4000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client
+            port:
+              number: 80
+  - host: top-members-k3s.example.com
+    http:
+      paths:
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: server
+            port:
+              number: 4000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client
+            port:
+              number: 80
+---
+# top-members — Ingress (staging namespace)
+# Host sanitized to placeholder.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: top-members
+  namespace: staging
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: top-members-staging.k3.example.home
+    http:
+      paths:
+      - path: /api/
+        pathType: Prefix
+        backend:
+          service:
+            name: server
+            port:
+              number: 4000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: client
+            port:
+              number: 80

@@ -1,0 +1,23 @@
+# top-members — db-seed-data ConfigMap (SANITIZED)
+# Original contained real user accounts (real usernames, bcrypt password hashes,
+# family-member names) and real chat content — replaced with placeholder rows.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-seed-data
+  namespace: top-members
+data:
+  seed.sql: |-
+    INSERT INTO users (username, fname, lname, password_hash, role, created_at) VALUES
+    ('admin',    'Admin',    'User',  '$2b$10$CHANGE_ME_CHANGE_ME_CHANGE_ME', 'admin', '2023-07-15 00:30:00'),
+    ('member1',  'Member',   'One',   '$2b$10$CHANGE_ME_CHANGE_ME_CHANGE_ME', 'user',  '2023-09-02 00:30:00'),
+    ('member2',  'Member',   'Two',   '$2b$10$CHANGE_ME_CHANGE_ME_CHANGE_ME', 'user',  '2023-08-03 00:30:00'),
+    ('member3',  'Member',   'Three', '$2b$10$CHANGE_ME_CHANGE_ME_CHANGE_ME', 'user',  '2023-09-02 00:30:00');
+
+    INSERT INTO messages (user_id, title, content, created_at, pinned) VALUES
+    (1,'Welcome', 'Welcome to the app!', NOW() - INTERVAL '2 days', TRUE),
+    (1,'Note',    'Runs on self-hosted k3s.', NOW() - INTERVAL '2 days', TRUE),
+    (3,'Hello',   'Hi everyone.', NOW() - INTERVAL '1 day', TRUE),
+    (2,'Hello',   'Great to be here.', NOW() - INTERVAL '20 hours', TRUE),
+    (4,'Hello',   'Excited to join!', NOW() - INTERVAL '10 hours', TRUE),
+    (1,'Rules',   'Reminder: be respectful.', NOW() - INTERVAL '5 hours', TRUE);

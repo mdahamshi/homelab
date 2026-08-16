@@ -1,0 +1,14 @@
+# learn-jenkins-app — Service (namespace: default, NodePort)
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-jenkins-app
+  namespace: default
+spec:
+  type: NodePort
+  selector:
+    app: learn-jenkins-app
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80

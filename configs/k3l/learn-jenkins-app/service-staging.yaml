@@ -1,0 +1,14 @@
+# learn-jenkins-app — Service (namespace: staging, NodePort)
+apiVersion: v1
+kind: Service
+metadata:
+  name: learn-jenkins-app
+  namespace: staging
+spec:
+  type: NodePort
+  selector:
+    app: learn-jenkins-app
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80

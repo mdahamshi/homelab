@@ -1,0 +1,30 @@
+# top-members — db-seed Job (prod namespace only, already Completed)
+# Loads the (sanitized) seed data into postgres using the app's DATABASE_URL secret.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-seed
+  namespace: top-members
+spec:
+  completions: 1
+  parallelism: 1
+  backoffLimit: 6
+  template:
+    spec:
+      containers:
+      - name: psql
+        image: postgres:15
+        imagePullPolicy: IfNotPresent
+        command: ["sh", "-c", "psql \"$DATABASE_URL\" -f /seed/seed.sql"]
+        envFrom:
+        - secretRef:
+            name: top-members-secrets
+        volumeMounts:
+        - name: seed-data
+          mountPath: /seed
+        resources: {}
+      volumes:
+      - name: seed-data
+        configMap:
+          name: db-seed-data
+      restartPolicy: Never

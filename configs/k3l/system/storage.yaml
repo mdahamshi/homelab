@@ -1,0 +1,40 @@
+# Default StorageClass provisioned by k3s' local-path addon.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: rancher.io/local-path
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
+---
+# One PVC per postgres StatefulSet (staging + top-members), 1Gi RWO each,
+# backed by local-path on the single node.
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data-postgres-0
+  namespace: staging
+  labels:
+    app: postgres
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-data-postgres-0
+  namespace: top-members
+  labels:
+    app: postgres
+spec:
+  accessModes: [ReadWriteOnce]
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi

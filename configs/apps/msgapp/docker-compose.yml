@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: 'postgres:15'
+    container_name: msgapp_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'
+      interval: 5s
+      timeout: 20s
+      retries: 4
+  server:
+    build: ./server
+    container_name: msgapp_server
+    restart: always
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+      POSTGRES_DB_URL: 'postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}'
+    depends_on:
+      - postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://server:3000/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+  msgapp_client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: msgapp_client
+    restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://msgapp_client:80/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+volumes:
+  pgdata: null

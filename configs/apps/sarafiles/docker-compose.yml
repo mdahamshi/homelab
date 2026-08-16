@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: 'postgres:15'
+    container_name: sarafiles_postgres
+    restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'
+      interval: 5s
+      timeout: 20s
+      retries: 4
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+    volumes:
+      - 'pgdata_sarafiles:/var/lib/postgresql/data'
+      - './server/src/db/init:/docker-entrypoint-initdb.d'
+  server:
+    build: ./server
+    container_name: sarafiles_server
+    restart: always
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+      DATABASE_URL: 'postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}'
+      PORT: 4000
+    depends_on:
+      - postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://server:4000/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+  migrate:
+    build: ./server
+    command: 'sh -c "npx prisma generate && npx prisma migrate deploy && node src/db/init/seed.js"'
+    environment:
+      DATABASE_URL: 'postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}'
+    depends_on:
+      - postgres
+    restart: 'no'
+  sarafiles_client:
+    build: ./client
+    container_name: sarafiles_client
+    restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://sarafiles_client:80/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+volumes:
+  pgdata_sarafiles: null

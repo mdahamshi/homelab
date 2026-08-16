@@ -1,0 +1,10 @@
+# User-facing namespaces (kube-system/default are stock)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: staging
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: top-members

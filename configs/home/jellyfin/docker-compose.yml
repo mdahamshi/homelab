@@ -1,0 +1,29 @@
+services:
+  jellyfin:
+    image: 'lscr.io/linuxserver/jellyfin:latest'
+    environment:
+      - SERVICE_URL_JELLYFIN_8096
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Jerusalem
+      - JELLYFIN_PublishedServerUrl=$SERVICE_URL_JELLYFIN
+    ports:
+      - '8096:8096'
+    volumes:
+      - 'jellyfin-config:/config'
+      - '/mnt/docker-cache/jellyfin/cache:/config/cache'
+      - '/mnt/docker-cache/jellyfin/metadata:/config/data/metadata'
+      - '/mnt/docker-cache/jellyfin/transcodes:/config/data/transcodes'
+      - '/mnt/videos:/data/videos'
+      - '/mnt/videos/movies:/data/movies'
+      - '/mnt/photos:/data/photos'
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://localhost:8096/health'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s

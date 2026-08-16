@@ -1,0 +1,26 @@
+services:
+  workout-tracker:
+    build: .
+    restart: unless-stopped
+    environment:
+      APP_USERNAME: '${APP_USERNAME:-admin}'
+      APP_PASSWORD: '${APP_PASSWORD:-changeme}'
+      SESSION_SECRET: '${SESSION_SECRET:-please-change-this-secret}'
+      COOKIE_SECURE: '${COOKIE_SECURE:-false}'
+      PORT: '3000'
+      DATA_DIR: /data
+    ports:
+      - '3000:3000'
+    volumes:
+      - 'tracker_data:/data'
+    healthcheck:
+      test:
+        - CMD
+        - wget
+        - '-qO-'
+        - 'http://localhost:3000/healthz'
+      interval: 30s
+      timeout: 5s
+      retries: 3
+volumes:
+  tracker_data: null

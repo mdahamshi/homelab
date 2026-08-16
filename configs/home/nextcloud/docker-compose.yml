@@ -1,0 +1,68 @@
+services:
+  nextcloud:
+    image: 'lscr.io/linuxserver/nextcloud:latest'
+    environment:
+      - SERVICE_FQDN_NEXTCLOUD_80
+      - PUID=1000
+      - PGID=1000
+      - 'TZ=${TZ:-Europe/Paris}'
+      - 'POSTGRES_DB=${POSTGRES_DB:-nextcloud}'
+      - 'POSTGRES_USER=${SERVICE_USER_POSTGRES}'
+      - 'POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}'
+      - POSTGRES_HOST=nextcloud-db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - 'nextcloud-config:/config'
+      - '/mnt/nextcloud:/data'
+      - '/home/mohammad/cert/saralab-ca.crt:/usr/local/share/ca-certificates/saralab-ca.crt:ro'
+    depends_on:
+      nextcloud-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - office-net
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://127.0.0.1:80'
+      interval: 2s
+      timeout: 10s
+      retries: 15
+  nextcloud-db:
+    image: 'postgres:16-alpine'
+    volumes:
+      - 'nextcloud-postgresql-data:/var/lib/postgresql/data'
+    environment:
+      - 'POSTGRES_USER=${SERVICE_USER_POSTGRES}'
+      - 'POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}'
+      - 'POSTGRES_DB=${POSTGRES_DB:-nextcloud}'
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'
+      interval: 5s
+      timeout: 20s
+      retries: 10
+  redis:
+    image: 'redis:7.4-alpine'
+    volumes:
+      - 'nextcloud-redis-data:/data'
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - PING
+      interval: 5s
+      timeout: 10s
+      retries: 20
+volumes:
+  nextcloud-config: null
+  nextcloud-postgresql-data: null
+  nextcloud-redis-data: null
+networks:
+  office-net:
+    external: true

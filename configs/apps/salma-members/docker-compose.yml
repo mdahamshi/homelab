@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: 'postgres:15'
+    container_name: salma_members_postgres
+    restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}'
+      interval: 5s
+      timeout: 20s
+      retries: 4
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+    volumes:
+      - 'pgdata_salma_members:/var/lib/postgresql/data'
+      - './server/src/db/init:/docker-entrypoint-initdb.d'
+  server:
+    build: ./server
+    container_name: salma_members_server
+    restart: always
+    environment:
+      POSTGRES_DB: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_USER: '${SERVICE_USER_POSTGRES}'
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_POSTGRES}'
+      DATABASE_URL: 'postgres://${SERVICE_USER_POSTGRES}:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/${SERVICE_USER_POSTGRES}'
+      MEMBERSHIP_PASSCODE: 'stop the war on gaza'
+      PORT: 4000
+    depends_on:
+      - postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://server:4000/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+  salma_members_client:
+    build: ./client
+    container_name: salma_members_client
+    restart: always
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://salma_members_client:80/api/health || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 2
+volumes:
+  pgdata_salma_members: null

@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  collabora:
+    image: collabora/code
+    container_name: collabora-code
+    restart: unless-stopped
+    ports:
+      - '9980:9980'
+    cap_add:
+      - MKNOD
+    environment:
+      - 'aliasgroup1=https://nextcloud.home.l:443'
+      - username=mdahamshi
+      - 'password=${SERVICE_PASSWORD_COLABORA}'
+      - dictionaries=en
+      - DONT_GEN_SSL_CERT=true
+      - DONT_ENCRYPT=yes
+      - server_name=co.home.l
+      - 'extra_params=--o:ssl.enable=false --o:ssl.termination=true'
+    healthcheck:
+      test:
+        - CMD
+        - curl
+        - '-f'
+        - 'http://localhost:9980/hosting/discovery'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - office-net
+networks:
+  office-net:
+    external: true

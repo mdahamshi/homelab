@@ -1,0 +1,23 @@
+# Traefik — values passed to k3s' bundled Helm controller.
+# Source: /var/lib/rancher/k3s/server/manifests/traefik.yaml (HelmChart spec.valuesContent)
+# Chart: traefik-39.0.701_up39.0.7 (Helm-managed by k3s; everything else is kubectl-applied)
+deployment:
+  podAnnotations:
+    prometheus.io/port: "8082"
+    prometheus.io/scrape: "true"
+providers:
+  kubernetesIngress:
+    publishedService:
+      enabled: true
+priorityClassName: "system-cluster-critical"
+image:
+  repository: "rancher/mirrored-library-traefik"
+  tag: "3.6.13"
+tolerations:
+- key: "CriticalAddonsOnly"
+  operator: "Exists"
+- key: "node-role.kubernetes.io/control-plane"
+  operator: "Exists"
+  effect: "NoSchedule"
+service:
+  ipFamilyPolicy: "PreferDualStack"

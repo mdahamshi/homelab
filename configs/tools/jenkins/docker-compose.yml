@@ -1,0 +1,29 @@
+services:
+  jenkins:
+    image: 'ghcr.io/mdahamshi/jenkins-kubectl:latest'
+    container_name: jenkins
+    restart: unless-stopped
+    user: jenkins
+    group_add:
+      - '988'
+    ports:
+      - '8080'
+      - '50000'
+    volumes:
+      - 'jenkins_home:/var/jenkins_home'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+      - '/usr/bin/docker:/usr/bin/docker'
+      - '/home/mohammad/.ssh:/var/jenkins_home/.ssh'
+    environment:
+      - JAVA_OPTS=-Dhudson.model.DirectoryBrowserSupport.CSP=
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - 'curl -f http://localhost:8080/login 2>/dev/null || exit 1'
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 120s
+volumes:
+  jenkins_home:
+    driver: local

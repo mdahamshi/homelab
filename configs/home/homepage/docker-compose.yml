@@ -1,0 +1,16 @@
+services:
+  homepage:
+    image: 'ghcr.io/gethomepage/homepage:latest'
+    container_name: homepage
+    ports:
+      - '3000'
+    volumes:
+      - 'homepage:/app/config'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    environment:
+      HOMEPAGE_ALLOWED_HOSTS: 'gethomepage.dev,h.home.l'
+      PUID: $PUID
+      PGID: $PGID
+volumes:
+  homepage:
+    driver: local

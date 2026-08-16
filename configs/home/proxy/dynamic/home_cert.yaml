@@ -1,0 +1,12 @@
+# Traefik file-provider dynamic config (host: home.l)
+# Serves the internal home.l TLS certificate issued by a private
+# in-house CA (cert/key live in /data/coolify/proxy/certs/).
+# Lets you reach home services (Immich, Nextcloud, Jellyfin, ...) with
+# trusted-in-house TLS without exposing anything to a public CA.
+# Key file is 0600; cert+CA are world-readable by design.
+
+tls:
+  certificates:
+    -
+      certFile: /traefik/certs/example.home.cert
+      keyFile: /traefik/certs/example.home.key

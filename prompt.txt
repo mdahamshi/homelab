@@ -1,0 +1,52 @@
+You are documenting a homelab infrastructure for a public GitHub showcase repo.
+
+Environment: Proxmox VE host (pve.l) running several VMs, reachable via SSH:
+- col.l  — Coolify (deployment/PaaS layer)
+- apps.l — Node.js / personal project apps
+- home.l — home services (Nextcloud, Immich, etc.)
+- tools.l — infra tools (Cloudflare Tunnel, Gitea, Transmission)
+- hao.l  — Home Assistant OS (root@hao.l)
+TASK:
+1. SSH into each host and inventory what's running: `docker ps -a`, locate
+   docker-compose.yml / .env files, systemd services for anything not
+   containerized, and note exposed ports and reverse proxy config
+   (Traefik/Nginx) if present.
+2. For Proxmox itself, capture VM/LXC list, storage layout (ZFS pools,
+   datasets), and backup setup (PBS/sanoid/syncoid) at a high level —
+   no need to SSH deep into pve.l, a summary from `qm list`/`pct list`
+   plus what you already know is enough.
+3. Build a sanitized copy of every relevant docker-compose.yml / config
+   file. Redact: passwords, API keys, tokens, auth secrets, real domain
+   names (replace with example.home / example.com), internal IPs (replace
+   with 10.0.x.x placeholders), and any personally identifying info.
+   Do NOT include .env files with real values — regenerate them as
+   .env.example with placeholder keys only.
+4. Organize output into this repo structure:
+   /README.md
+   /docs/architecture.md   (with a Mermaid diagram of hosts + services)
+   /configs/<host>/<service>/docker-compose.yml  (sanitized)
+   /configs/<host>/<service>/.env.example
+4b. For hao.l (Home Assistant OS): note it's HAOS, not a generic Docker
+    host — access is via the HA CLI (`ha` command) over SSH, not raw
+    docker/systemd. Inventory installed add-ons (`ha addons list`),
+    integrations in use (from configuration.yaml if readable), and any
+    automations worth highlighting (e.g. prayer time sensors, Zigbee
+    devices, sleep tracking integration) — but do NOT dump the actual
+    configuration.yaml, secrets.yaml, or .storage/ directory contents,
+    since these routinely contain long-lived API tokens, lat/long
+    coordinates, device IDs, and other sensitive data. Summarize
+    capabilities in prose instead of including raw config for this host.
+5. README.md should include: a short intro, the architecture diagram,
+   a table of services (name, host, purpose, tech stack), notable
+   design decisions (e.g. ZFS backup strategy, TLS via internal CA,
+   Coolify as deploy layer), and a "lessons learned" section.
+6. Also generate a single-page index.html (static, no build step) as
+   an alternative visual showcase — same content, styled minimally,
+   suitable for GitHub Pages.
+7. Before finishing, do a final pass over every generated file
+   specifically searching for anything that looks like a secret,
+   token, password, or real hostname/IP, and flag it instead of
+   silently including it.
+
+Ask me before running any command that isn't purely read-only (cat, ls,
+docker ps, docker inspect, grep, find, qm list, pct list, zfs list, etc).

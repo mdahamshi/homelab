@@ -1,0 +1,5 @@
+# k3s server config (sanitized) — /etc/rancher/k3s/config.yaml
+# Only custom setting on this node: additional SANs for the server cert.
+tls-san:
+  - 10.0.8.13
+  - k3.example.home

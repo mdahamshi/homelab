@@ -1,0 +1,20 @@
+# learn-jenkins-app — Ingress (namespace: default)
+# Host sanitized to placeholder.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: learn-jenkins-app
+  namespace: default
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: learn.k3.example.home
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: learn-jenkins-app
+            port:
+              number: 80

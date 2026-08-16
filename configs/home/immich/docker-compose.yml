@@ -1,0 +1,64 @@
+services:
+  immich-server:
+    image: 'ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}'
+    container_name: immich_server
+    environment:
+      - 'DB_PASSWORD=${SERVICE_PASSWORD_IMMICH}'
+      - DB_USERNAME=postgres
+      - DB_DATABASE_NAME=immich
+      - UPLOAD_LOCATION=/mnt/photos
+      - DB_DATA_LOCATION=/var/lib/docker/volumes/immich_db
+    volumes:
+      - '/mnt/photos:/data'
+      - '/mnt/photos/google:/home/google'
+      - '/mnt/photos/next:/home/next'
+      - '/etc/localtime:/etc/localtime:ro'
+    env_file:
+      - .env
+    ports:
+      - '2283:2283'
+    depends_on:
+      - immich-db
+      - immich-redis
+    restart: always
+    healthcheck:
+      disable: false
+    labels:
+      - traefik.http.middlewares.immich-timeout.buffering.maxRequestBodyBytes=0
+      - traefik.http.middlewares.immich-timeout.buffering.memRequestBodyBytes=0
+      - traefik.http.middlewares.immich-timeout.buffering.maxResponseBodyBytes=0
+      - traefik.http.routers.immich.middlewares=immich-timeout
+      - traefik.http.middlewares.immich-body.buffering.maxRequestBodyBytes=0
+      - coolify.traefik.middlewares=immich-body
+  immich-machine-learning:
+    image: 'ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}'
+    container_name: immich_machine_learning
+    volumes:
+      - 'model-cache:/cache'
+    env_file:
+      - .env
+    restart: always
+    healthcheck:
+      disable: false
+  immich-redis:
+    image: 'redis:7'
+    container_name: immich_redis
+    volumes:
+      - '/var/lib/docker/volumes/immich_redis:/data'
+    restart: always
+    healthcheck:
+      test: 'redis-cli ping || exit 1'
+  immich-db:
+    image: 'ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0'
+    container_name: immich-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: '${SERVICE_PASSWORD_IMMICH}'
+      POSTGRES_DB: immich
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+    volumes:
+      - '/var/lib/docker/volumes/immich_db:/var/lib/postgresql/data'
+    shm_size: 128mb
+    restart: always
+volumes:
+  model-cache: null
