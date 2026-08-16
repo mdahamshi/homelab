@@ -66,6 +66,15 @@
       gap: 14px
     }
 
+    .arch-diagram {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+
     .card {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -195,29 +204,7 @@
     </header>
 
     <h2>Architecture at a glance</h2>
-    <pre>
-Internet
-   |
-[ Cloudflare edge ]  &lt;-- Cloudflare Zero Trust tunnels (no inbound ports)
-   |
-   +-- cloudflared (apps.l)        +-- cloudflared x2 (tools.l)
-   |                               |
-[ Traefik apps.l ]            [ Traefik tools.l ]
-   |                               |
-[ Node.js apps ]        [ Gitea, Jenkins, n8n, Authentik, Transmission ]
-   |
-[ Traefik home.l ]
-   |
-[ Nextcloud, Immich, Jellyfin, Collabora, Docuseal, Homepage, OpenClaw, Mawaqit ]
-   |
-[ hao.l — Home Assistant OS ]   [ pve.l — ZFS zpool_home, NFS, sanoid ]
-                                     |
-                              [ pbs.l — Proxmox Backup Server ]
-                              (nightly vzdump of VMs/CTs + ZFS data replication)
-
-k3.l — k3s Kubernetes cluster (kubectl, Traefik ingress, no Coolify)
-[ learn-jenkins-app | jenkins-k3s-pipeline | top-members (staging + prod) ]
-</pre>
+    <img src="./arch.png" class="arch-diagram">
 
     <h2>Hosts</h2>
     <div class="grid">
