@@ -1,65 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homelab — Architecture Showcase</title>
-<style>
-  :root{
-    --bg:#0f1115; --panel:#171a21; --panel2:#1d212b; --line:#2a2f3a;
-    --txt:#e6e8ee; --muted:#9aa3b2; --acc:#5b8cff; --acc2:#38d9a9; --warn:#f2c94c;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--txt);line-height:1.55}
-  .wrap{max-width:1080px;margin:0 auto;padding:32px 20px 80px}
-  header{border-bottom:1px solid var(--line);padding-bottom:24px;margin-bottom:28px}
-  h1{font-size:2rem;margin:0 0 8px;letter-spacing:-.02em}
-  h2{font-size:1.25rem;margin:40px 0 12px;color:var(--acc2);letter-spacing:-.01em}
-  p.lede{color:var(--muted);max-width:72ch}
-  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-  .card h3{margin:0 0 4px;font-size:1rem}
-  .card p{margin:0;color:var(--muted);font-size:.9rem}
-  .tag{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:99px;
-    background:rgba(91,140,255,.12);color:var(--acc);border:1px solid rgba(91,140,255,.35);margin-right:6px}
-  .tag.h{background:rgba(56,217,169,.1);color:var(--acc2);border-color:rgba(56,217,169,.35)}
-  .tag.t{background:rgba(242,201,76,.08);color:var(--warn);border-color:rgba(242,201,76,.35)}
-  table{width:100%;border-collapse:collapse;font-size:.9rem}
-  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
-  th{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
-  td .dom{color:var(--muted);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem}
-  pre{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:16px;overflow:auto;
-    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.78rem;line-height:1.5}
-  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;background:var(--panel2);
-    padding:1px 5px;border-radius:4px}
-  .muted{color:var(--muted)}
-  ul.lessons li{margin:6px 0}
-  footer{margin-top:56px;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:.85rem}
-  a{color:var(--acc)}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Homelab — Architecture Showcase</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --panel2: #1d212b;
+      --line: #2a2f3a;
+      --txt: #e6e8ee;
+      --muted: #9aa3b2;
+      --acc: #5b8cff;
+      --acc2: #38d9a9;
+      --warn: #f2c94c;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--txt);
+      line-height: 1.55
+    }
+
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 20px 80px
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 24px;
+      margin-bottom: 28px
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0 0 8px;
+      letter-spacing: -.02em
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 40px 0 12px;
+      color: var(--acc2);
+      letter-spacing: -.01em
+    }
+
+    p.lede {
+      color: var(--muted);
+      max-width: 72ch
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px
+    }
+
+    .card h3 {
+      margin: 0 0 4px;
+      font-size: 1rem
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: .72rem;
+      padding: 2px 8px;
+      border-radius: 99px;
+      background: rgba(91, 140, 255, .12);
+      color: var(--acc);
+      border: 1px solid rgba(91, 140, 255, .35);
+      margin-right: 6px
+    }
+
+    .tag.h {
+      background: rgba(56, 217, 169, .1);
+      color: var(--acc2);
+      border-color: rgba(56, 217, 169, .35)
+    }
+
+    .tag.t {
+      background: rgba(242, 201, 76, .08);
+      color: var(--warn);
+      border-color: rgba(242, 201, 76, .35)
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .04em
+    }
+
+    td .dom {
+      color: var(--muted);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .8rem
+    }
+
+    pre {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      overflow: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .78rem;
+      line-height: 1.5
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .85em;
+      background: var(--panel2);
+      padding: 1px 5px;
+      border-radius: 4px
+    }
+
+    .muted {
+      color: var(--muted)
+    }
+
+    ul.lessons li {
+      margin: 6px 0
+    }
+
+    footer {
+      margin-top: 56px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      color: var(--muted);
+      font-size: .85rem
+    }
+
+    a {
+      color: var(--acc)
+    }
+  </style>
 </head>
+
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<header>
-  <h1>Homelab</h1>
-  <p class="lede">
-    A documented, sanitized self-hosted setup: <strong>Proxmox VE</strong> +
-    <strong>ZFS</strong>, <strong>Docker</strong> deployed via
-    <strong>Coolify</strong>, per-host <strong>Traefik</strong> reverse
-    proxies, <strong>Cloudflare Tunnels</strong>, a <strong>k3s Kubernetes
-    cluster</strong>, and <strong>Home Assistant OS</strong>.
-  </p>
-  <p class="muted" style="margin:0">
-    All hostnames, IPs and secrets are replaced with placeholders for public
-    sharing. Source of truth: <a href="README.md">README</a> and
-    <a href="docs/architecture.md">docs/architecture.md</a>.
-  </p>
-</header>
+    <header>
+      <h1>Homelab</h1>
+      <p class="lede">
+        A documented, sanitized self-hosted setup: <strong>Proxmox VE</strong> +
+        <strong>ZFS</strong>, <strong>Docker</strong> deployed via
+        <strong>Coolify</strong>, per-host <strong>Traefik</strong> reverse
+        proxies, <strong>Cloudflare Tunnels</strong>, a <strong>k3s Kubernetes
+          cluster</strong>, and <strong>Home Assistant OS</strong>.
+      </p>
+      <p class="muted" style="margin:0">
+        All hostnames, IPs and secrets are replaced with placeholders for public
+        sharing. Source of truth: <a href="https://github.com/mdahamshi/homelab">README</a> and
+        <a href="https://github.com/mdahamshi/homelab/blob/main/docs/architecture.md">docs/architecture.md</a>.
+      </p>
+    </header>
 
-<h2>Architecture at a glance</h2>
-<pre>
+    <h2>Architecture at a glance</h2>
+    <pre>
 Internet
    |
 [ Cloudflare edge ]  &lt;-- Cloudflare Zero Trust tunnels (no inbound ports)
@@ -83,71 +219,260 @@ k3.l — k3s Kubernetes cluster (kubectl, Traefik ingress, no Coolify)
 [ learn-jenkins-app | jenkins-k3s-pipeline | top-members (staging + prod) ]
 </pre>
 
-<h2>Hosts</h2>
-<div class="grid">
-  <div class="card"><h3>pve.l</h3><p>Proxmox VE host — ZFS pool, NFS shares, sanoid snapshots</p></div>
-  <div class="card"><h3>col.l</h3><p>Coolify control plane (deploys every container)</p></div>
-  <div class="card"><h3>apps.l</h3><p>Node.js / personal project apps + 1 tunnel</p></div>
-  <div class="card"><h3>home.l</h3><p>Home services (Nextcloud, Immich, Jellyfin, …)</p></div>
-  <div class="card"><h3>tools.l</h3><p>Infra tools (Gitea, Jenkins, n8n, Authentik, …)</p></div>
-  <div class="card"><h3>k3.l</h3><p>k3s Kubernetes cluster — kubectl workloads, separate from Coolify</p></div>
-  <div class="card"><h3>pbs.l</h3><p>Proxmox Backup Server — datastore pbs-vms + ZFS replication target</p></div>
-  <div class="card"><h3>hao.l</h3><p>Home Assistant OS (Supervisor-managed, not containerized)</p></div>
-</div>
+    <h2>Hosts</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>pve.l</h3>
+        <p>Proxmox VE host — ZFS pool, NFS shares, sanoid snapshots</p>
+      </div>
+      <div class="card">
+        <h3>col.l</h3>
+        <p>Coolify control plane (deploys every container)</p>
+      </div>
+      <div class="card">
+        <h3>apps.l</h3>
+        <p>Node.js / personal project apps + 1 tunnel</p>
+      </div>
+      <div class="card">
+        <h3>home.l</h3>
+        <p>Home services (Nextcloud, Immich, Jellyfin, …)</p>
+      </div>
+      <div class="card">
+        <h3>tools.l</h3>
+        <p>Infra tools (Gitea, Jenkins, n8n, Authentik, …)</p>
+      </div>
+      <div class="card">
+        <h3>k3.l</h3>
+        <p>k3s Kubernetes cluster — kubectl workloads, separate from Coolify</p>
+      </div>
+      <div class="card">
+        <h3>pbs.l</h3>
+        <p>Proxmox Backup Server — datastore pbs-vms + ZFS replication target</p>
+      </div>
+      <div class="card">
+        <h3>hao.l</h3>
+        <p>Home Assistant OS (Supervisor-managed, not containerized)</p>
+      </div>
+    </div>
 
-<h2>Services</h2>
-<table>
-  <thead><tr><th>Service</th><th>Host</th><th>Purpose</th><th>Stack</th><th>Domain</th></tr></thead>
-  <tbody>
-    <tr><td>msgapp</td><td>apps.l</td><td>Messaging</td><td>Node.js + Postgres 15</td><td class="dom">msg.example.com</td></tr>
-    <tr><td>sarabooks</td><td>apps.l</td><td>Book catalog</td><td>Node.js + Postgres 15</td><td class="dom">books.example.com</td></tr>
-    <tr><td>salma-members</td><td>apps.l</td><td>Membership portal</td><td>Node.js + Postgres 15</td><td class="dom">members.example.com</td></tr>
-    <tr><td>sarafiles</td><td>apps.l</td><td>File upload / sharing</td><td>Node.js + Postgres 15 + Cloudinary</td><td class="dom">files.example.com</td></tr>
-    <tr><td>babble</td><td>apps.l</td><td>Chat / communication</td><td>Node.js</td><td class="dom">babble.example.com</td></tr>
-    <tr><td>home-play</td><td>apps.l</td><td>Play dashboard</td><td>Static / Nginx</td><td class="dom">play.example.com</td></tr>
-    <tr><td>workout-tracker</td><td>apps.l</td><td>Fitness tracker</td><td>Node.js</td><td class="dom">tracker.example.com</td></tr>
-    <tr><td>Immich</td><td>home.l</td><td>Photo management</td><td>Node.js + ML + Postgres + Redis</td><td class="dom">immich.example.home</td></tr>
-    <tr><td>Nextcloud</td><td>home.l</td><td>File sync</td><td>Nextcloud + Postgres 16 + Redis</td><td class="dom">nextcloud.example.home</td></tr>
-    <tr><td>Jellyfin</td><td>home.l</td><td>Media server</td><td>Jellyfin (linuxserver)</td><td class="dom">j.example.home</td></tr>
-    <tr><td>Collabora</td><td>home.l</td><td>Online office</td><td>Collabora CODE</td><td class="dom">co.example.home</td></tr>
-    <tr><td>Docuseal</td><td>home.l</td><td>Document signing</td><td>Docuseal + Postgres 16</td><td class="dom">docseal.example.home</td></tr>
-    <tr><td>Homepage</td><td>home.l</td><td>Service dashboard</td><td>gethomepage</td><td class="dom">h.example.home</td></tr>
-    <tr><td>OpenClaw</td><td>home.l</td><td>Personal AI agent</td><td>OpenClaw + browser sandbox</td><td class="dom">claw.example.home</td></tr>
-    <tr><td>Mawaqit</td><td>home.l</td><td>Prayer-times API</td><td>FastAPI (uvicorn)</td><td class="dom">mawaqit.example.home</td></tr>
-    <tr><td>Gitea</td><td>tools.l</td><td>Git hosting</td><td>Gitea + Postgres 16</td><td class="dom">git.example.home</td></tr>
-    <tr><td>Jenkins</td><td>tools.l</td><td>CI (docker-in-docker)</td><td>Jenkins + kubectl</td><td class="dom">j.example.home</td></tr>
-    <tr><td>n8n</td><td>tools.l</td><td>Workflow automation</td><td>n8n (SQLite)</td><td class="dom">n8n.example.home</td></tr>
-    <tr><td>Authentik</td><td>tools.l</td><td>SSO / identity</td><td>Authentik + Postgres 16 + Redis</td><td class="dom">auth.example.com</td></tr>
-    <tr><td>Transmission</td><td>tools.l</td><td>Download client</td><td>Transmission (linuxserver)</td><td class="dom">tr.example.home</td></tr>
-    <tr><td>learn-jenkins-app</td><td>k3.l</td><td>Jenkins→k3s deploy experiment</td><td>Node.js (GHCR), 2 namespaces</td><td class="dom">learn.k3.example.home</td></tr>
-    <tr><td>jenkins-k3s-app</td><td>k3.l</td><td>Jenkins→k3s pipeline app</td><td>Node.js (GHCR)</td><td class="dom">NodePort</td></tr>
-    <tr><td>top-members</td><td>k3.l</td><td>Membership app (staging + prod)</td><td>Node.js + Postgres 15 + nginx</td><td class="dom">top-members.k3.example.home</td></tr>
-  </tbody>
-</table>
+    <h2>Services</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Host</th>
+          <th>Purpose</th>
+          <th>Stack</th>
+          <th>Domain</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>msgapp</td>
+          <td>apps.l</td>
+          <td>Messaging</td>
+          <td>Node.js + Postgres 15</td>
+          <td class="dom">msg.example.com</td>
+        </tr>
+        <tr>
+          <td>sarabooks</td>
+          <td>apps.l</td>
+          <td>Book catalog</td>
+          <td>Node.js + Postgres 15</td>
+          <td class="dom">books.example.com</td>
+        </tr>
+        <tr>
+          <td>salma-members</td>
+          <td>apps.l</td>
+          <td>Membership portal</td>
+          <td>Node.js + Postgres 15</td>
+          <td class="dom">members.example.com</td>
+        </tr>
+        <tr>
+          <td>sarafiles</td>
+          <td>apps.l</td>
+          <td>File upload / sharing</td>
+          <td>Node.js + Postgres 15 + Cloudinary</td>
+          <td class="dom">files.example.com</td>
+        </tr>
+        <tr>
+          <td>babble</td>
+          <td>apps.l</td>
+          <td>Chat / communication</td>
+          <td>Node.js</td>
+          <td class="dom">babble.example.com</td>
+        </tr>
+        <tr>
+          <td>home-play</td>
+          <td>apps.l</td>
+          <td>Play dashboard</td>
+          <td>Static / Nginx</td>
+          <td class="dom">play.example.com</td>
+        </tr>
+        <tr>
+          <td>workout-tracker</td>
+          <td>apps.l</td>
+          <td>Fitness tracker</td>
+          <td>Node.js</td>
+          <td class="dom">tracker.example.com</td>
+        </tr>
+        <tr>
+          <td>Immich</td>
+          <td>home.l</td>
+          <td>Photo management</td>
+          <td>Node.js + ML + Postgres + Redis</td>
+          <td class="dom">immich.example.home</td>
+        </tr>
+        <tr>
+          <td>Nextcloud</td>
+          <td>home.l</td>
+          <td>File sync</td>
+          <td>Nextcloud + Postgres 16 + Redis</td>
+          <td class="dom">nextcloud.example.home</td>
+        </tr>
+        <tr>
+          <td>Jellyfin</td>
+          <td>home.l</td>
+          <td>Media server</td>
+          <td>Jellyfin (linuxserver)</td>
+          <td class="dom">j.example.home</td>
+        </tr>
+        <tr>
+          <td>Collabora</td>
+          <td>home.l</td>
+          <td>Online office</td>
+          <td>Collabora CODE</td>
+          <td class="dom">co.example.home</td>
+        </tr>
+        <tr>
+          <td>Docuseal</td>
+          <td>home.l</td>
+          <td>Document signing</td>
+          <td>Docuseal + Postgres 16</td>
+          <td class="dom">docseal.example.home</td>
+        </tr>
+        <tr>
+          <td>Homepage</td>
+          <td>home.l</td>
+          <td>Service dashboard</td>
+          <td>gethomepage</td>
+          <td class="dom">h.example.home</td>
+        </tr>
+        <tr>
+          <td>OpenClaw</td>
+          <td>home.l</td>
+          <td>Personal AI agent</td>
+          <td>OpenClaw + browser sandbox</td>
+          <td class="dom">claw.example.home</td>
+        </tr>
+        <tr>
+          <td>Mawaqit</td>
+          <td>home.l</td>
+          <td>Prayer-times API</td>
+          <td>FastAPI (uvicorn)</td>
+          <td class="dom">mawaqit.example.home</td>
+        </tr>
+        <tr>
+          <td>Gitea</td>
+          <td>tools.l</td>
+          <td>Git hosting</td>
+          <td>Gitea + Postgres 16</td>
+          <td class="dom">git.example.home</td>
+        </tr>
+        <tr>
+          <td>Jenkins</td>
+          <td>tools.l</td>
+          <td>CI (docker-in-docker)</td>
+          <td>Jenkins + kubectl</td>
+          <td class="dom">j.example.home</td>
+        </tr>
+        <tr>
+          <td>n8n</td>
+          <td>tools.l</td>
+          <td>Workflow automation</td>
+          <td>n8n (SQLite)</td>
+          <td class="dom">n8n.example.home</td>
+        </tr>
+        <tr>
+          <td>Authentik</td>
+          <td>tools.l</td>
+          <td>SSO / identity</td>
+          <td>Authentik + Postgres 16 + Redis</td>
+          <td class="dom">auth.example.com</td>
+        </tr>
+        <tr>
+          <td>Transmission</td>
+          <td>tools.l</td>
+          <td>Download client</td>
+          <td>Transmission (linuxserver)</td>
+          <td class="dom">tr.example.home</td>
+        </tr>
+        <tr>
+          <td>learn-jenkins-app</td>
+          <td>k3.l</td>
+          <td>Jenkins→k3s deploy experiment</td>
+          <td>Node.js (GHCR), 2 namespaces</td>
+          <td class="dom">learn.k3.example.home</td>
+        </tr>
+        <tr>
+          <td>jenkins-k3s-app</td>
+          <td>k3.l</td>
+          <td>Jenkins→k3s pipeline app</td>
+          <td>Node.js (GHCR)</td>
+          <td class="dom">NodePort</td>
+        </tr>
+        <tr>
+          <td>top-members</td>
+          <td>k3.l</td>
+          <td>Membership app (staging + prod)</td>
+          <td>Node.js + Postgres 15 + nginx</td>
+          <td class="dom">top-members.k3.example.home</td>
+        </tr>
+      </tbody>
+    </table>
 
-<h2>Key design decisions</h2>
-<ul class="lessons">
-  <li><strong>Coolify as the deploy layer</strong> — every container is a Coolify service/application; compose files carry <code>coolify.*</code> labels and an external per-service network.</li>
-  <li><strong>Per-host Traefik (v3.6)</strong> — each VM runs its own proxy on 80/443/8080 with the Docker provider; Let's Encrypt HTTP-challenge for public certs plus a private-CA cert served for internal <code>*.example.home</code> hosts.</li>
-  <li><strong>Zero inbound ports</strong> — public access rides Cloudflare Tunnels terminating at Traefik inside the LAN.</li>
-  <li><strong>k3s is separate from Coolify</strong> — k3.l workloads are plain <code>kubectl apply</code> manifests; only Traefik comes from k3s' bundled Helm controller (plain-HTTP ingress, no cert-manager).</li>
-  <li><strong>Layered backups</strong> — sanoid snapshots + ZFS replication of <code>zpool_home/data</code> to <code>pbs.l</code>, plus nightly <code>vzdump</code> of every VM/CT into the PBS <code>pbs-vms</code> datastore (verify weekly, prune daily, GC weekly).</li>
-  <li><strong>ZFS + sanoid</strong> — single pool, recursive 15-minute snapshots, VM dumps to a backup dataset; media/Nextcloud data on NFS-exported datasets, bind-mounted into containers.</li>
-  <li><strong>Secrets never in compose</strong> — everything is <code>${VAR}</code> from <code>.env</code>; the repo ships only <code>.env.example</code>.</li>
-</ul>
+    <h2>Key design decisions</h2>
+    <ul class="lessons">
+      <li><strong>Coolify as the deploy layer</strong> — every container is a Coolify service/application; compose files
+        carry <code>coolify.*</code> labels and an external per-service network.</li>
+      <li><strong>Per-host Traefik (v3.6)</strong> — each VM runs its own proxy on 80/443/8080 with the Docker provider;
+        Let's Encrypt HTTP-challenge for public certs plus a private-CA cert served for internal
+        <code>*.example.home</code> hosts.
+      </li>
+      <li><strong>Zero inbound ports</strong> — public access rides Cloudflare Tunnels terminating at Traefik inside the
+        LAN.</li>
+      <li><strong>k3s is separate from Coolify</strong> — k3.l workloads are plain <code>kubectl apply</code> manifests;
+        only Traefik comes from k3s' bundled Helm controller (plain-HTTP ingress, no cert-manager).</li>
+      <li><strong>Layered backups</strong> — sanoid snapshots + ZFS replication of <code>zpool_home/data</code> to
+        <code>pbs.l</code>, plus nightly <code>vzdump</code> of every VM/CT into the PBS <code>pbs-vms</code> datastore
+        (verify weekly, prune daily, GC weekly).
+      </li>
+      <li><strong>ZFS + sanoid</strong> — single pool, recursive 15-minute snapshots, VM dumps to a backup dataset;
+        media/Nextcloud data on NFS-exported datasets, bind-mounted into containers.</li>
+      <li><strong>Secrets never in compose</strong> — everything is <code>${VAR}</code> from <code>.env</code>; the repo
+        ships only <code>.env.example</code>.</li>
+    </ul>
 
-<h2>Lessons learned</h2>
-<ul class="lessons">
-  <li>Coolify keeps generated compose under <code>/data/coolify/</code> (root-owned); from a non-root account you reconstruct them from <code>docker inspect</code> (labels + env + mounts).</li>
-  <li>Healthcheck commands can embed real credentials (e.g. Transmission's <code>curl -u user:pass</code>) — always scrub them before sharing.</li>
-  <li>Container names encode Coolify UUIDs — treat them as opaque identifiers.</li>
-  <li>HAOS must be inventoried with the <code>ha</code> CLI, not docker; never commit its config files (they carry tokens, coordinates, device IDs).</li>
-  <li>k3s: never commit <code>kubeconfig</code>, <code>Secret</code> resources, or private images — note their existence in prose, redact <code>status</code>/metadata, and scrub seed-data configmaps that embed real accounts and bcrypt hashes.</li>
-  <li>PBS: verify backup claims from the backup server itself; keep API tokens, <code>authkey.key</code>, <code>proxy.key</code>, and notification configs (a Telegram webhook embeds the live bot token + chat id) out of the repo.</li>
-</ul>
+    <h2>Lessons learned</h2>
+    <ul class="lessons">
+      <li>Coolify keeps generated compose under <code>/data/coolify/</code> (root-owned); from a non-root account you
+        reconstruct them from <code>docker inspect</code> (labels + env + mounts).</li>
+      <li>Healthcheck commands can embed real credentials (e.g. Transmission's <code>curl -u user:pass</code>) — always
+        scrub them before sharing.</li>
+      <li>Container names encode Coolify UUIDs — treat them as opaque identifiers.</li>
+      <li>HAOS must be inventoried with the <code>ha</code> CLI, not docker; never commit its config files (they carry
+        tokens, coordinates, device IDs).</li>
+      <li>k3s: never commit <code>kubeconfig</code>, <code>Secret</code> resources, or private images — note their
+        existence in prose, redact <code>status</code>/metadata, and scrub seed-data configmaps that embed real accounts
+        and bcrypt hashes.</li>
+      <li>PBS: verify backup claims from the backup server itself; keep API tokens, <code>authkey.key</code>,
+        <code>proxy.key</code>, and notification configs (a Telegram webhook embeds the live bot token + chat id) out of
+        the repo.
+      </li>
+    </ul>
 
-<h2>Repository layout</h2>
-<pre>configs/
+    <h2>Repository layout</h2>
+    <pre>configs/
   pve/                     # ZFS / storage / backup notes + sanoid.conf
   col/                     # Coolify control plane + its Traefik
   apps/                    # Node.js apps + cloudflared (apps.l)
@@ -156,16 +481,17 @@ k3.l — k3s Kubernetes cluster (kubectl, Traefik ingress, no Coolify)
   k3l/                     # k3s cluster manifests + notes (k3.l)
   pbs/                     # Proxmox Backup Server: jobs/schedules + notes (pbs.l)
   haos/                    # Home Assistant OS capabilities (prose only)</pre>
-<p class="muted">
-  Every <code>configs/&lt;host&gt;/&lt;service&gt;/</code> folder contains a sanitized
-  <code>docker-compose.yml</code> and an <code>.env.example</code> with placeholder keys —
-  copy the example to <code>.env</code>, fill in real values, keep it out of git.
-</p>
+    <p class="muted">
+      Every <code>configs/&lt;host&gt;/&lt;service&gt;/</code> folder contains a sanitized
+      <code>docker-compose.yml</code> and an <code>.env.example</code> with placeholder keys —
+      copy the example to <code>.env</code>, fill in real values, keep it out of git.
+    </p>
 
-<footer>
-  Homelab showcase — public, sanitized config. Not an operational runbook.
-</footer>
+    <footer>
+      Homelab showcase — public, sanitized config. Not an operational runbook.
+    </footer>
 
-</div>
+  </div>
 </body>
+
 </html>

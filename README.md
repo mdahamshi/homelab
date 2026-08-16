@@ -11,30 +11,7 @@ every config redacted so it can live in a public repo.
 > that's the point.
 
 ## Architecture
-
-```
-Internet
-   |
-[ Cloudflare edge ]  <- Cloudflare Zero Trust tunnels (no inbound ports)
-   |
-   +-- cloudflared (apps.l)   +-- cloudflared x2 (tools.l)
-   |                          |
-[ Traefik apps.l ]        [ Traefik tools.l ]
-   |                          |
-[ Node.js apps ]          [ Gitea, Jenkins, n8n, Authentik, Transmission ]
-   |
-[ Traefik home.l ]
-   |
-[ Nextcloud, Immich, Jellyfin, Collabora, Docuseal, Homepage, OpenClaw, Mawaqit ]
-   |
-[ hao.l — Home Assistant OS ]   [ pve.l — ZFS zpool_home, NFS, sanoid ]
-                                     |
-                              [ pbs.l — Proxmox Backup Server ]
-                              (nightly vzdump of VMs/CTs + ZFS data replication)
-
-k3.l — k3s Kubernetes cluster (kubectl, Traefik ingress, no Coolify)
-[ learn-jenkins-app | jenkins-k3s-pipeline | top-members (staging + prod) ]
-```
+['arch.png](arch.png)
 
 Full diagram + rationale: [`docs/architecture.md`](docs/architecture.md)
 
