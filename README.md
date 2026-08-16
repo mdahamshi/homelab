@@ -11,7 +11,7 @@ every config redacted so it can live in a public repo.
 > that's the point.
 
 ## Architecture
-['arch.png](arch.png)
+![screenshot](./arch.png)
 
 Full diagram + rationale: [`docs/architecture.md`](docs/architecture.md)
 
