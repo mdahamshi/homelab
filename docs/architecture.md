@@ -14,6 +14,8 @@ opened on the router.
 flowchart TB
     subgraph internet["Internet"]
         CF["Cloudflare edge / DNS"]
+        tsnet["Tailscale
+            (mesh VPN)"]
     end
 
     subgraph pve["pve.l — Proxmox VE"]
@@ -97,6 +99,16 @@ flowchart TB
     CF --> atun
     CF --> ttun1
     CF --> ttun2
+    tsnet -. "subnet router
+        (remote LAN access)" .-> pve
+
+    subgraph pi["Raspberry Pi — standalone, outside Proxmox"]
+        pihole["Pi-hole
+            local DNS for *.l domains"]
+    end
+
+    pihole -. "DNS" .-> apps & home & tools & k3
+
     ctl -. deploys containers .-> apps & home & tools
     jk -. builds & deploys images .-> k3
     has -->|prayer times| mw
@@ -106,7 +118,7 @@ flowchart TB
 
 | Host | Role | Notes |
 |------|------|-------|
-| `pve.l` | Proxmox VE host | ZFS pool, NFS shares, sanoid snapshotting |
+| `pve.l` | Proxmox VE host | ZFS pool, NFS shares, sanoid snapshotting, Tailscale subnet router |
 | `col.l` | Coolify control plane | Deploys/manages all containers across hosts |
 | `apps.l` | Node.js / personal apps | Traefik + 7 apps + 1 tunnel |
 | `home.l` | Home services | Traefik + 8 services + media/NAS mounts |
@@ -114,6 +126,7 @@ flowchart TB
 | `k3.l` | k3s Kubernetes cluster | Single node, Traefik ingress, separate from Coolify |
 | `pbs.l` | Proxmox Backup Server | Datastore `pbs-vms` + ZFS replication target, root-only SSH |
 | `hao.l` | Home Assistant OS | Supervisor-managed, not containerized |
+| *(Raspberry Pi)* | Pi-hole DNS | Standalone device, not a Proxmox guest; local DNS for `*.l` domains |
 
 ## Service table
 
@@ -142,6 +155,7 @@ flowchart TB
 | learn-jenkins-app | k3.l | Jenkins→k3s deploy experiment | Node.js (GHCR image), 2 namespaces |
 | jenkins-k3s-app | k3.l | Jenkins→k3s pipeline app | Node.js (GHCR image) |
 | top-members | k3.l | Membership app (staging + prod) | Node.js + Postgres 15 + nginx SPA |
+| Pi-hole | *(Raspberry Pi)* | Local DNS for `*.l` domains | Pi-hole (standalone, outside Proxmox) |
 
 ## Key design decisions
 
@@ -155,6 +169,11 @@ flowchart TB
   served for the internal `example.home` hosts.
 - **No inbound ports** — public access rides Cloudflare Tunnels; the tunnels
   terminate at Traefik inside the LAN.
+- **Three-tier access model** — Cloudflare Tunnels handle public access (no
+  inbound ports), a Tailscale subnet router on pve.l provides private remote
+  access to the whole LAN over a mesh VPN (no per-host installs needed), and
+  a Pi-hole on a separate Raspberry Pi provides local DNS resolution for all
+  `*.l` domains.
 - **Layered backup: sanoid + syncoid + PBS** — the shared `zpool_home/data`
   tree is snapshotted by sanoid (weekly/monthly/yearly) and replicated via
   ZFS send/recv to `pbs.l:pbs/data_bkp`; simultaneously every VM/CT gets a

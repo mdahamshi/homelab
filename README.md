@@ -79,6 +79,9 @@ fill in real values, and it stays out of git.
 - **Zero inbound ports** — public access via Cloudflare Tunnels terminating
   at Traefik inside the LAN (k3.l's Traefik is plain HTTP ingress; its public
   top-members host is the one exception).
+- **Three-tier access model** — Cloudflare Tunnels = public access, Tailscale
+  (subnet router on pve.l) = private remote access to the whole LAN,
+  Pi-hole (separate Raspberry Pi) = local DNS resolution for `*.l` domains.
 - **Layered backups (sanoid + syncoid + PBS)** — `zpool_home/data` is
   snapshotted and ZFS-replicated to `pbs.l:pbs/data_bkp`, and every VM/CT
   gets a nightly `vzdump` into the `pbs-vms` datastore on pbs.l (verify

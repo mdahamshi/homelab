@@ -218,7 +218,7 @@
     <div class="grid">
       <div class="card">
         <h3>pve.l</h3>
-        <p>Proxmox VE host — ZFS pool, NFS shares, sanoid snapshots</p>
+        <p>Proxmox VE host — ZFS pool, NFS shares, Tailscale subnet router</p>
       </div>
       <div class="card">
         <h3>col.l</h3>
@@ -247,6 +247,10 @@
       <div class="card">
         <h3>hao.l</h3>
         <p>Home Assistant OS (Supervisor-managed, not containerized)</p>
+      </div>
+      <div class="card">
+        <h3>Pi-hole</h3>
+        <p>Raspberry Pi — standalone device, not a Proxmox guest; local DNS for *.l</p>
       </div>
     </div>
 
@@ -436,6 +440,9 @@
       </li>
       <li><strong>Zero inbound ports</strong> — public access rides Cloudflare Tunnels terminating at Traefik inside the
         LAN.</li>
+      <li><strong>Three-tier access model</strong> — Cloudflare Tunnels = public access, Tailscale (subnet router on
+        pve.l) = private remote access to the whole LAN, Pi-hole (separate Raspberry Pi) = local DNS resolution for
+        <code>*.l</code> domains.</li>
       <li><strong>k3s is separate from Coolify</strong> — k3.l workloads are plain <code>kubectl apply</code> manifests;
         only Traefik comes from k3s' bundled Helm controller (plain-HTTP ingress, no cert-manager).</li>
       <li><strong>Layered backups</strong> — sanoid snapshots + ZFS replication of <code>zpool_home/data</code> to
